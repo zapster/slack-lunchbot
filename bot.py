@@ -26,7 +26,7 @@ def _get_mensa_menu():
     return None
 
 
-def _to_message(html):
+def _to_slackified_markdown(html):
     def strong(x):
         return '*' + x.strip() + '* '
 
@@ -111,7 +111,7 @@ def main():
     poster = SlackPoster(token=os.environ["SLACK_API_TOKEN"], channel=args.slack) if args.slack else StdPoster()
 
     if html:
-        msg = _to_message(html) if args.format == 'markdown' else str(html)
+        msg = _to_slackified_markdown(html) if args.format == 'markdown' else str(html)
         poster.post(msg)
         time.sleep(args.timeout)
         poster.post(lets_go_msg)
