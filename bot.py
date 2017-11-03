@@ -31,10 +31,13 @@ def _to_slackified_markdown(html):
         return '*' + x.strip() + '* '
 
     def icons(x):
-        if x.lower().startswith('vegetarisch'):
+        x_lower = x.lower()
+        if x_lower.startswith('vegetarisch'):
             return ' :herb: (vegetarian) '
-        if x.lower().startswith('vegan'):
+        elif x_lower.startswith('vegan'):
             return ' :seedling: (vegan) '
+        elif x_lower.startswith('fisch'):
+            return ' :fish: (fish) '
         return ' (' + x.replace('Icon', '').strip() + ') '
     # date
     html.find('span', 'day-of-week').extract()
