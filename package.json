@@ -1,0 +1,23 @@
+{
+  "name": "serverless-lunchbot",
+  "version": "1.0.0",
+  "description": "Exporting food data from the Mensa IBM mainframe since 2017, in the cloud",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zapster/slack-lunchbot.git"
+  },
+  "keywords": [
+    "serverless",
+    "slack",
+    "mensa",
+    "food",
+    "bot"
+  ],
+  "bugs": {
+    "url": "https://github.com/zapster/slack-lunchbot/issues"
+  },
+  "homepage": "https://github.com/zapster/slack-lunchbot#readme",
+  "devDependencies": {
+    "serverless-python-requirements": "^4.0.4"
+  }
+}

@@ -1,0 +1,36 @@
+# Welcome to Serverless!
+# This file is the main config file for your service.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+
+service: serverless-lunchbot
+
+provider:
+  name: aws
+  profile: serverless-lunchbot
+
+  runtime: python3.6
+  stage: ${opt:stage, 'production'}
+
+  environment:
+    SLACK_API_TOKEN: ${file(config.${self:provider.stage}.yml):SLACK_API_TOKEN}
+    SLACK_CHANNEL: ${file(config.${self:provider.stage}.yml):SLACK_CHANNEL}
+
+  memorySize: 128
+  timeout: 10
+
+package:
+  exclude:
+    - '**/*'
+  include:
+    - lunchbot/**
+
+functions:
+  post_menu_to_slack:
+    handler: lunchbot/serverless/handler.post_menu_to_slack
+    events:
+      - schedule: ${file(config.${self:provider.stage}.yml):SCHEDULE}
+
+plugins:
+  - serverless-python-requirements
