@@ -48,11 +48,8 @@ def _to_slackified_markdown(html):
     # date
     html.find('span', 'day-of-week').extract()
     raw_date = html.find('span', 'date')
-    try:
-        d = datetime.strptime(raw_date.get_text(), '%d.%m.%Y').strftime('%A, %d. %B %Y')
-        raw_date.extract()
-    except object as e:
-        raise e
+    d = datetime.strptime(raw_date.get_text(), '%d.%m.%Y').strftime('%A, %d. %B %Y')
+    raw_date.extract()
 
     msg = strong(d)
 
