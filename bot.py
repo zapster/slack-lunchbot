@@ -1,3 +1,4 @@
+import sys
 import os
 from slackclient import SlackClient
 import requests
@@ -84,13 +85,16 @@ class SlackPoster(object):
 
         sc = SlackClient(self.token)
 
-        sc.api_call(
+        result = sc.api_call(
             "chat.postMessage",
             channel=self.channel,
             text=msg,
             as_user=True,
             mrkdwn=True
         )
+
+        if not result["ok"]:
+            print(result, file=sys.stderr)
 
 
 def main():
