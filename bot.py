@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
+
 import sys
 import os
 from slackclient import SlackClient
@@ -114,7 +119,7 @@ def main():
 
     class StdPoster(object):
         def post(self, x):
-            print x
+            print(x)
     poster = SlackPoster(token=os.environ["SLACK_API_TOKEN"], channel=args.slack) if args.slack else StdPoster()
 
     if html:
