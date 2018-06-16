@@ -13,6 +13,10 @@ Usage
 
 See `--help` message. In Slack mode the API token is expected in the `SLACK_API_TOKEN` environment variable.
 
+If you don't want to install this module to your local system, invoke it like this:
+
+    PYTHONPATH=/path/to/slack-lunchbot /path/to/python -m lunchbot --help
+
 Cron Job Example
 ----------------
 
