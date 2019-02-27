@@ -17,6 +17,7 @@ def cli():
                         help='send message to slack channel')
     parser.add_argument('--format', '-f', choices=['html', 'markdown'],
                         default='markdown', help='format of message')
+    parser.add_argument('--message', '-m',  help='send a custom message')
     parser.add_argument('--lets-go', '-t', dest='timeout', metavar='N',
                         type=int, default=0,
                         help='send lets go message after N seconds')
@@ -26,7 +27,10 @@ def cli():
         else HtmlFormatter()
     poster = SlackPoster(os.environ["SLACK_API_TOKEN"], args.slack) if args.slack \
         else ConsolePoster()
-    post(formatter, poster, lets_go_timeout=args.timeout)
+    if args.message:
+        poster.post(args.message)
+    else:
+        post(formatter, poster, lets_go_timeout=args.timeout)
 
 
 if __name__ == "__main__":
