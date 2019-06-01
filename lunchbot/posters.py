@@ -5,7 +5,7 @@ from __future__ import print_function
 
 import sys
 
-from slackclient import SlackClient
+import slack
 
 
 class SlackPoster(object):
@@ -14,9 +14,8 @@ class SlackPoster(object):
         self.channel = channel
 
     def post(self, msg):
-        sc = SlackClient(self.token)
-        result = sc.api_call(
-            "chat.postMessage",
+        client = slack.WebClient(self.token)
+        result = client.chat_postMessage(
             channel=self.channel,
             text=msg,
             as_user=True,

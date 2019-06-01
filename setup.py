@@ -4,14 +4,14 @@
 from setuptools import setup, find_packages
 
 NAME = 'lunchbot'
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 DESCRIPTION = 'Exporting food data from the Mensa IBM mainframe since 2017'
-REQUIRES_PYTHON = '>=3.6.0'
+REQUIRES_PYTHON = '>=3.6'
 
 REQUIRED = [
-    'requests~=2.18.0',
-    'slackclient~=1.2.0',
-    'beautifulsoup4~=4.6.0',
+    'requests>=2.0',
+    'slackclient>=2.0',
+    'beautifulsoup4>=4.6',
 ]
 
 setup(
