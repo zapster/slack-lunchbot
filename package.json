@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/zapster/slack-lunchbot#readme",
   "devDependencies": {
-    "serverless-python-requirements": "^4.0.4"
+    "serverless-python-requirements": "^4.3.0"
   }
 }
