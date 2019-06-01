@@ -24,9 +24,12 @@ functions:
   post_menu_to_slack:
     handler: lunchbot/serverless/handler.post_menu_to_slack
     events:
-      - schedule: ${file(config.${self:provider.stage}.yml):SCHEDULE}
+      - schedule:
+            rate: ${file(config.${self:provider.stage}.yml):SCHEDULE}
+            timezone: ${file(config.${self:provider.stage}.yml):TIMEZONE}
 
 plugins:
+  - serverless-local-schedule
   - serverless-python-requirements
 
 custom:

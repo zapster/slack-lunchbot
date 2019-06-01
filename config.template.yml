@@ -1,3 +1,4 @@
 SLACK_API_TOKEN: xoxb-YOUR_SLACK_API_TOKEN_HERE
 SLACK_CHANNEL: lunch
-SCHEDULE: cron(00 12 ? * MON-FRI *)
+SCHEDULE: cron(00 12 * * ? *)
+TIMEZONE: Europe/Vienna

@@ -70,7 +70,8 @@ The free tier of AWS Lambda covers everything this bot needs, when only called a
 
     - `SLACK_API_TOKEN` of your [bot user](https://api.slack.com/bot-users#setup)
     - `SLACK_CHANNEL` to be posted, without the hash tag
-    - `SCHEDULE` specifies the [schedule events](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html), e.g. `cron(00 12 * * MON-FRI)` for a post from Monday - Friday at 12:00
+    - `SCHEDULE` specifies the [schedule events](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html), e.g. `cron(00 12 * * ? *)` for a post at 12:00 - :warning: You can not specify custom weekdays, these are hard-coded to `MON-FRI` (see the [limitations of this plugin](https://github.com/UnitedIncome/serverless-local-schedule/issues/3) for more details)
+    - `TIMEZONE` is the timezone of the cron expression, specified as a [tz database name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List), e.g. `Europe/Vienna`
 
 6. Deploy to the cloud
 
