@@ -4,14 +4,13 @@
 import os
 import sys
 import json
-import requests
 
 # hotfix the path, when this is called as a script by aws
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from bot import post
-from posters import ConsolePoster, SlackPoster
-from formatters import HtmlFormatter, MarkdownFormatter
+from posters import SlackPoster
+from formatters import MarkdownFormatter
 
 
 def post_menu_to_slack(event, context):

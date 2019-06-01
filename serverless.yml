@@ -1,16 +1,10 @@
-# Welcome to Serverless!
-# This file is the main config file for your service.
-#
-# For full config options, check the docs:
-#    docs.serverless.com
-
 service: serverless-lunchbot
 
 provider:
   name: aws
   profile: serverless-lunchbot
 
-  runtime: python3.6
+  runtime: python3.7
   stage: ${opt:stage, 'production'}
 
   environment:
@@ -34,3 +28,7 @@ functions:
 
 plugins:
   - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    pythonBin: python
