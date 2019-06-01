@@ -41,9 +41,9 @@ Cloud installation
 ==================
 
 You can deploy `slack-lunchbot` easily into [AWS Lambda](https://aws.amazon.com/lambda) using the [serverless](https://serverless.com/) framework.
-The free tier of AWS Lambda should cover everything this bot needs.
+The free tier of AWS Lambda covers everything this bot needs, when only called a few times per day.
 
-1. Install the `serverless` framework first with [npm](https://www.npmjs.com/get-npm)
+1. Install the `serverless` framework globally with [npm](https://www.npmjs.com/get-npm)
 
         npm install -g serverless
 
@@ -79,6 +79,17 @@ The free tier of AWS Lambda should cover everything this bot needs.
 7. Manually trigger your AWS Lambda function and inspect the log
 
         serverless invoke -f post_menu_to_slack -l
+
+8. Remove from the cloud
+
+        serverless remove -v
+
+You can also specify other configuration stages apart from `production` with the `--stage` parameter.
+E.g., for a configuration `config.test.yml` do the following:
+
+    serverless deploy -v --stage test
+    serverless invoke --stage test -f post_menu_to_slack -l
+    serverless remove -v --stage test
 
 Contributing
 ============
