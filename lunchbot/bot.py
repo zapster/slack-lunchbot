@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 mensa_url = 'http://menu.mensen.at/index/index/locid/1'
 ger_weekday = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
 lets_go_msg = "let's go for lunch!"
-no_food_msg = "No food found! ;-("
+no_food_msg = "No food found! ;-(\n\nVisit " + mensa_url
 
 
 def _get_mensa_menu():
