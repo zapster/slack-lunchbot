@@ -16,17 +16,10 @@ no_food_msg = "No food found! ;-("
 def _get_mensa_menu():
     r = requests.get(mensa_url)
     soup = BeautifulSoup(r.text.replace('\n', ' '), 'html.parser')
-    weekday = ger_weekday[date.weekday(date.today())]
-    content = [dayContent for dayContent in
-               soup.find_all('div', 'day')
-               if dayContent.find('span', 'day-of-week').string == weekday]
-
-    if len(content) > 0:
-        c = content[0]
-        [x.extract() for x in
-         c.find_all('div', {'id': ['category52', 'category15']})]
-        return c
-    return None
+    weekday_num = date.weekday(date.today())
+    for x in soup.find_all("div", {'class': "d-md-none"}):
+        x.decompose()
+    return soup.find_all("div", {'class': "menu-item-{}".format(weekday_num + 1)})
 
 
 def post(formatter, poster, lets_go_timeout=0):
