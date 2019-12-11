@@ -7,19 +7,30 @@ import requests
 from datetime import date
 from bs4 import BeautifulSoup
 
-mensa_url = 'http://menu.mensen.at/index/index/locid/1'
-ger_weekday = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+mensa_url = 'https://www.mensen.at/'
+mensa_id = 1  # JKU Linz Mensa
+
 lets_go_msg = "let's go for lunch!"
 no_food_msg = "No food found! ;-(\n\nVisit " + mensa_url
 
 
 def _get_mensa_menu():
-    r = requests.get(mensa_url)
+    r = requests.get(mensa_url, cookies={'mensenExtLocation': str(mensa_id)})
     soup = BeautifulSoup(r.text.replace('\n', ' '), 'html.parser')
-    weekday_num = date.weekday(date.today())
-    for x in soup.find_all("div", {'class': "d-md-none"}):
-        x.decompose()
-    return soup.find_all("div", {'class': "menu-item-{}".format(weekday_num + 1)})
+    weekday = date.weekday(date.today()) + 1
+    divs = soup.find_all('div', 'menu-item-{}'.format(weekday))
+
+    if len(divs) > 0:
+
+        # clean divs with duplicate content
+        menus = {}
+        for div in divs:
+            if div.get_text() not in menus:
+                menus[div.get_text()] = div
+
+        return menus.values() if len(menus.values()) > 0 else None
+
+    return None
 
 
 def post(formatter, poster, lets_go_timeout=0):

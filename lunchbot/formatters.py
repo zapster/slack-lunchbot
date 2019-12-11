@@ -7,6 +7,9 @@ import re
 
 from datetime import date, datetime
 
+sections_ignore = ["M-Cafe"]
+sections_order = ["Menü Classic 1", "Menü Classic 2", "Tagesteller", "Choice"]
+
 
 class HtmlFormatter(object):
     def format(self, html):
@@ -16,7 +19,10 @@ class HtmlFormatter(object):
 class MarkdownFormatter(object):
     def format(self, html):
         def strong(x):
-            return '*' + x.strip() + '* '
+            return ' *' + x.strip() + '* ' if len(x) > 0 else ''
+
+        def italic(x):
+            return ' _' + x.strip() + '_ ' if len(x) > 0 else ''
 
         def icons(x):
             x_lower = x.lower()
@@ -28,38 +34,57 @@ class MarkdownFormatter(object):
                 return ' :fish: (fish) '
             return ' (' + x.replace('Icon', '').strip() + ') '
 
-        def cmp(elm):
-            header = elm.find("h2")
-            if header:
-                text = header.get_text()
-                if text.lower().startswith("choice"):
-                    # choice last
-                    return "XXXX" + text
-                return text
-            return "ZZZZ"
+        # date headline
+        today = date.today().strftime("%A, %d %B %Y")
+        blocks = ["> " + strong(today)]
 
-        def do(html):
-            if any(x.get_text() == "M-Cafe" for x in html.find_all("h2")):
-                # ignore M-Cafe
-                return ""
+        for div in html:
 
-            # images
-            for elm in html.find_all("img"):
-                elm.replace_with(icons(elm['alt']))
-            # strong
-            for elm in html.find_all("strong"):
-                elm.replace_with(strong(elm.get_text()))
-            for br in html.find_all("br"):
-                br.replace_with("\n")
             # headline
-            for h in html.find_all('h2'):
-                h.replace_with('\n\n\n' + strong(h.get_text()) + '\n\n')
-            # remove div
-            for h in html.find_all(['div', 'p']):
-                h.replace_with(h.get_text() + '\n')
-            # prettify
-            text = html.get_text()
-            text = re.sub(r'  *,', ',', text)
-            text = re.sub(r'  *', ' ', text)
-            return text
-        return str("\n".join([do(x) for x in sorted(html, key=cmp)]))
+            ignore = False
+            for elm in div.find_all('h2'):
+                ignore |= any(e in elm.get_text() for e in sections_ignore)
+                elm.replace_with(
+                    ":fork_and_knife: " + strong(elm.get_text()) + " :fork_and_knife:" + '\n')
+
+            # drop ignored sections
+            if ignore:
+                elm.extract()
+                continue
+
+            # replace outer paragraphs and image links
+            for elm in div.find_all('p') + div.find_all('a'):
+                elm.unwrap()
+
+            # br tags to line breaks
+            for elm in div.find_all('br'):
+                elm.replace_with("\n")
+
+            # images to emojis
+            for elm in div.find_all('img'):
+                elm.replace_with(icons(elm['alt']))
+
+            # strong to italic
+            for elm in div.find_all('strong'):
+                elm.replace_with(italic(elm.get_text()))
+
+            text = div.get_text()
+
+            # extract inner menus and visually separate them (assuming that menues are ended by a proper price tag and formatted italic)
+            text = re.sub(r'(.+?_€\s?\d{1,2}(?:,\d{1,2})?_)', r' \1\n', text)
+
+            # trim leading and trailing whitespace and double-or-more spaces
+            text = re.sub(r'^\s+', '', text)
+            text = re.sub(r'\s+$', '', text)
+            text = re.sub(r'[^\S\r\n]{2,}', r' ', text)
+
+            blocks.append(text)
+
+        # sort by using the index of where in the order list a phrase has been matched
+        def _sorter(txt):
+            return next((i for i, key in enumerate(sections_order) if key in txt), -1)
+
+        result = '\n\n'.join(sorted(blocks[1:], key=_sorter))
+        result = blocks[0] + '\n\n' + result
+
+        return result
